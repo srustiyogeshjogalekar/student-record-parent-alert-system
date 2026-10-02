@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>My Timetable | Alva's Degree College</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-shell">
+        <aside class="dashboard-sidebar">
+            <a class="dashboard-brand" href="{{ url_for('faculty_dashboard') }}">
+                <img src="{{ url_for('static', filename='images.jpg') }}" alt="Alva's Degree College logo">
+            </a>
+            <nav class="dashboard-nav" aria-label="Faculty navigation">
+                <a class="dashboard-nav-link" href="{{ url_for('faculty_dashboard') }}"><span class="nav-symbol">⌂</span>Dashboard</a>
+                <a class="dashboard-nav-link" href="{{ url_for('new_student') }}"><span class="nav-symbol">♙</span>Add Student</a>
+                <a class="dashboard-nav-link" href="{{ url_for('student_records') }}"><span class="nav-symbol">▣</span>Student Records</a>
+                <a class="dashboard-nav-link" href="{{ url_for('internal_marks') }}"><span class="nav-symbol">▤</span>Internal Marks</a>
+                <a class="dashboard-nav-link active" href="{{ url_for('faculty_timetable') }}"><span class="nav-symbol">▦</span>My Timetable</a>
+                <a class="dashboard-nav-link" href="{{ url_for('manage_subjects') }}"><span class="nav-symbol">☷</span>Manage Subjects</a>
+                <a class="dashboard-nav-link" href="{{ url_for('event_coordinator') }}"><span class="nav-symbol">▣</span>Event Coordinator</a>
+            </nav>
+            <a class="dashboard-logout" href="{{ url_for('home') }}"><span class="nav-symbol">↪</span>Logout</a>
+        </aside>
+        <main class="dashboard-main">
+            <header class="dashboard-topbar">
+                <button class="sidebar-toggle" type="button" aria-label="Toggle navigation">☰</button>
+                <div class="faculty-profile">
+                    <span class="profile-avatar">{{ (faculty.name if faculty else 'Faculty')[0]|upper }}</span>
+                    <span><strong>{{ faculty.name if faculty else 'Faculty' }}</strong><small>{{ faculty.department if faculty else 'Faculty Member' }}</small></span>
+                </div>
+            </header>
+            <section class="timetable-view" aria-labelledby="timetable-heading">
+                <div class="timetable-view-heading">
+                    <div>
+                        <p class="timetable-view-eyebrow">Faculty dashboard</p>
+                        <h1 id="timetable-heading">My Timetable</h1>
+                        <p>Classes assigned to you by the administrator.</p>
+                    </div>
+                </div>
+                <article class="timetable-view-card">
+                    <div class="timetable-view-card-heading">
+                        <h2>Weekly class schedule</h2>
+                        {% if faculty %}<span>{{ faculty.faculty_id }}</span>{% endif %}
+                    </div>
+                    {% if entries %}
+                    <div class="timetable-table-wrap">
+                        <table class="timetable-table">
+                            <thead><tr><th>Day</th><th>Time</th><th>Subject</th><th>Course / Class</th><th>Year</th><th>Classroom</th></tr></thead>
+                            <tbody>{% for entry in entries %}
+                                <tr>
+                                    <td>{{ entry.day }}</td>
+                                    <td>{{ entry.start_time }}–{{ entry.end_time }}</td>
+                                    <td>{{ entry.subject_name or entry.activity_type or '—' }}</td>
+                                    <td>{{ entry.course }}{% if entry.section %} – {{ entry.section }}{% endif %}</td>
+                                    <td>{{ entry.year }}</td>
+                                    <td>{{ entry.room or '—' }}</td>
+                                </tr>
+                            {% endfor %}</tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <div class="timetable-empty"><span>▦</span><p>No timetable has been assigned yet.</p><small>Your administrator will add your classes here.</small></div>
+                    {% endif %}
+                </article>
+            </section>
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

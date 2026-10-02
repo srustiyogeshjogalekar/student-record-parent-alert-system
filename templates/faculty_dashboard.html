@@ -1,0 +1,81 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Dashboard | Alva's Degree College</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-shell">
+        <aside class="dashboard-sidebar">
+            <a class="dashboard-brand" href="{{ url_for('faculty_dashboard') }}">
+                <img src="{{ url_for('static', filename='images.jpg') }}" alt="Alva's Degree College logo">
+            </a>
+            <nav class="dashboard-nav" aria-label="Faculty navigation">
+                <a class="dashboard-nav-link active" href="{{ url_for('faculty_dashboard') }}"><span class="nav-symbol">⌂</span>Dashboard</a>
+                <a class="dashboard-nav-link" href="{{ url_for('new_student') }}"><span class="nav-symbol">♙</span>Add Student</a>
+                <details class="dashboard-add-menu dashboard-attendance-menu">
+                    <summary class="dashboard-nav-link"><span class="nav-symbol">▣</span>Attendance <span class="menu-chevron">⌄</span></summary>
+                    <div class="course-dropdown" aria-label="Choose attendance course and year">
+                        {% for available_course in ['BCA', 'BBA', 'BA', 'B.Com', 'B.Sc'] %}<details class="course-submenu"><summary>{{ available_course }}</summary><div><a href="{{ url_for('attendance', course=available_course, year='1st Year') }}">1st Year</a><a href="{{ url_for('attendance', course=available_course, year='2nd Year') }}">2nd Year</a><a href="{{ url_for('attendance', course=available_course, year='3rd Year') }}">3rd Year</a></div></details>{% endfor %}
+                    </div>
+                </details>
+<a class="dashboard-nav-link" href="{{ url_for('student_records') }}"><span class="nav-symbol">▣</span>Student Records</a>
+                <a class="dashboard-nav-link" href="{{ url_for('internal_marks') }}"><span class="nav-symbol">▤</span>Internal Marks</a>
+                <a class="dashboard-nav-link" href="{{ url_for('faculty_timetable') }}"><span class="nav-symbol">▦</span>My Timetable</a>
+                <a class="dashboard-nav-link" href="{{ url_for('manage_subjects') }}"><span class="nav-symbol">☷</span>Manage Subjects</a>
+                <a class="dashboard-nav-link" href="{{ url_for('semester_results', course=attendance_course if attendance_course != 'All Courses' else 'BCA', year=attendance_year if attendance_year != 'All Years' else '1st Year', semester='I Semester') }}"><span class="nav-symbol">▥</span>Semester Results</a>
+                <a class="dashboard-nav-link" href="{{ url_for('parent_alerts') }}"><span class="nav-symbol">◈</span>Parent Alert</a>
+                <a class="dashboard-nav-link" href="{{ url_for('event_coordinator') }}"><span class="nav-symbol">▣</span>Event Coordinator</a>
+                <a class="dashboard-nav-link" href="#reports"><span class="nav-symbol">▧</span>Attendance Reports</a>
+            </nav>
+            <a class="dashboard-logout" href="{{ url_for('home') }}"><span class="nav-symbol">↪</span>Logout</a>
+        </aside>
+
+        <main class="dashboard-main">
+            <header class="dashboard-topbar">
+                <button class="sidebar-toggle" type="button" aria-label="Toggle navigation">☰</button>
+                <div class="faculty-profile">
+                    <span class="profile-avatar">F</span>
+                    <span><strong>Faculty</strong><small>Computer Science</small></span>
+                    <span class="profile-chevron">⌄</span>
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <div class="dashboard-heading">
+                    <div><span class="welcome-leaf">❧</span><span><h1>Welcome, Faculty!</h1><p>Here's what's happening in your department today.</p></span></div>
+                    <time datetime="{{ dashboard_iso_date|default('') }}">▣ &nbsp; {{ dashboard_date|default('Today') }}</time>
+                </div>
+
+                <section class="metric-grid" aria-label="Department summary">
+                    <article class="metric-card"><span class="metric-icon">♟</span><div><p>Total Students</p><strong>{{ total_students|default(0) }}</strong><span class="metric-positive">Active Students</span></div></article>
+                    <article class="metric-card"><span class="metric-icon">✓</span><div><p>Today's Attendance</p><strong>{{ attendance_counts.get('Present', 0) }}</strong><span class="metric-positive">{{ attendance_counts.get('Present', 0) }} Present</span></div></article>
+                    <article class="metric-card"><span class="metric-icon">!</span><div><p>Today's Absentees</p><strong>{{ attendance_counts.get('Absent', 0) }}</strong><span class="metric-danger">Absent Today</span></div></article>
+                    <article class="metric-card"><span class="metric-icon">◈</span><div><p>Parent Alerts</p><strong>5</strong><span class="metric-danger">Unread Alerts</span></div></article>
+                </section>
+
+                <section class="dashboard-grid dashboard-grid-main">
+                    <article class="dashboard-panel attendance-panel" id="attendance">
+                        <div class="panel-heading"><h2>Attendance Overview</h2><div><a href="{{ url_for('attendance', course=attendance_course if attendance_course != 'All Courses' else 'BCA', year=attendance_year if attendance_year != 'All Years' else '1st Year') }}">Mark Attendance</a><details class="attendance-course-menu"><summary aria-label="Choose attendance course and year">{{ attendance_course|default('All Courses') }}{% if attendance_year|default('All Years') != 'All Years' %} - {{ attendance_year }}{% endif %}<span>⌄</span></summary><div class="attendance-course-dropdown"><details class="course-submenu"><summary>BCA</summary><div><a href="{{ url_for('faculty_dashboard', course='BCA', year='1st Year') }}#attendance">1st Year</a><a href="{{ url_for('faculty_dashboard', course='BCA', year='2nd Year') }}#attendance">2nd Year</a><a href="{{ url_for('faculty_dashboard', course='BCA', year='3rd Year') }}#attendance">3rd Year</a></div></details><details class="course-submenu"><summary>BBA</summary><div><a href="{{ url_for('faculty_dashboard', course='BBA', year='1st Year') }}#attendance">1st Year</a><a href="{{ url_for('faculty_dashboard', course='BBA', year='2nd Year') }}#attendance">2nd Year</a><a href="{{ url_for('faculty_dashboard', course='BBA', year='3rd Year') }}#attendance">3rd Year</a></div></details><details class="course-submenu"><summary>BA</summary><div><a href="{{ url_for('faculty_dashboard', course='BA', year='1st Year') }}#attendance">1st Year</a><a href="{{ url_for('faculty_dashboard', course='BA', year='2nd Year') }}#attendance">2nd Year</a><a href="{{ url_for('faculty_dashboard', course='BA', year='3rd Year') }}#attendance">3rd Year</a></div></details><details class="course-submenu"><summary>BS</summary><div><a href="{{ url_for('faculty_dashboard', course='BS', year='1st Year') }}#attendance">1st Year</a><a href="{{ url_for('faculty_dashboard', course='BS', year='2nd Year') }}#attendance">2nd Year</a><a href="{{ url_for('faculty_dashboard', course='BS', year='3rd Year') }}#attendance">3rd Year</a></div></details><details class="course-submenu"><summary>B.Com</summary><div><a href="{{ url_for('faculty_dashboard', course='B.Com', year='1st Year') }}#attendance">1st Year</a><a href="{{ url_for('faculty_dashboard', course='B.Com', year='2nd Year') }}#attendance">2nd Year</a><a href="{{ url_for('faculty_dashboard', course='B.Com', year='3rd Year') }}#attendance">3rd Year</a></div></details><details class="course-submenu"><summary>B.Sc</summary><div><a href="{{ url_for('faculty_dashboard', course='B.Sc', year='1st Year') }}#attendance">1st Year</a><a href="{{ url_for('faculty_dashboard', course='B.Sc', year='2nd Year') }}#attendance">2nd Year</a><a href="{{ url_for('faculty_dashboard', course='B.Sc', year='3rd Year') }}#attendance">3rd Year</a></div></details></div></details></div></div>
+                        <div class="attendance-dashboard-summary"><div><strong>{{ attendance_counts.get('Present', 0) }}</strong><span>Present</span></div><div><strong>{{ attendance_counts.get('Absent', 0) }}</strong><span>Absent</span></div><div><strong>{{ attendance_counts.get('Event', 0) }}</strong><span>Event</span></div></div>
+                        <div class="chart" role="img" aria-label="Six-day attendance percentage graph">
+                            <div class="chart-y-axis"><span>100%</span><span>80%</span><span>60%</span><span>40%</span><span>20%</span><span>0%</span></div>
+                            <div class="chart-area"><div class="chart-gridlines"><i></i><i></i><i></i><i></i><i></i><i></i></div><svg viewBox="0 0 600 220" preserveAspectRatio="none" aria-hidden="true"><path class="chart-fill" d="M20 {{ 220 - weekly_attendance[0].percentage * 1.6 }} L132 {{ 220 - weekly_attendance[1].percentage * 1.6 }} L244 {{ 220 - weekly_attendance[2].percentage * 1.6 }} L356 {{ 220 - weekly_attendance[3].percentage * 1.6 }} L468 {{ 220 - weekly_attendance[4].percentage * 1.6 }} L580 {{ 220 - weekly_attendance[5].percentage * 1.6 }} L580 220 L20 220 Z"></path><path class="chart-line" d="M20 {{ 220 - weekly_attendance[0].percentage * 1.6 }} L132 {{ 220 - weekly_attendance[1].percentage * 1.6 }} L244 {{ 220 - weekly_attendance[2].percentage * 1.6 }} L356 {{ 220 - weekly_attendance[3].percentage * 1.6 }} L468 {{ 220 - weekly_attendance[4].percentage * 1.6 }} L580 {{ 220 - weekly_attendance[5].percentage * 1.6 }}"></path>{% for item in weekly_attendance %}<circle cx="{{ [20, 132, 244, 356, 468, 580][loop.index0] }}" cy="{{ 220 - item.percentage * 1.6 }}" r="5"></circle>{% endfor %}</svg><div class="chart-values">{% for item in weekly_attendance %}<span>{{ item.percentage }}%</span>{% endfor %}</div><div class="chart-days">{% for item in weekly_attendance %}<span>{{ item.label }}</span>{% endfor %}</div></div>
+                        </div>
+                    </article>
+                </section>
+
+                <section class="dashboard-grid dashboard-grid-bottom">
+                </section>
+            </div>
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
+

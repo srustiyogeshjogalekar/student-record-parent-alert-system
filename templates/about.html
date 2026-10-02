@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% set active_page = 'about' %}
+{% block title %}About Us | Alva's Degree College{% endblock %}
+{% block content %}
+<main class="about-page">
+    <section class="about-hero">
+        <div class="about-hero-content">
+            <span class="eyebrow">About Us</span>
+            <h1>Moulding a<br>better tomorrow</h1>
+            <div class="title-rule"></div>
+            <p>Alva's Degree College is committed to providing quality education and holistic development to empower students for a better tomorrow. We strive to create a nurturing environment that fosters academic excellence, ethical values and overall growth.</p>
+        </div>
+        <div class="about-pattern" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></div>
+    </section>
+    <section class="commitment-section">
+        <span class="section-kicker">Our commitment</span>
+        <h2>Building a Better Tomorrow</h2>
+        <div class="commitment-grid">
+            <article class="commitment-card"><div class="commitment-icon">◇</div><h3>Quality Education</h3><span class="card-rule"></span><p>Delivering value-based education with a focus on knowledge, skills and practical learning.</p></article>
+            <article class="commitment-card"><div class="commitment-icon">◎</div><h3>Experienced Faculty</h3><span class="card-rule"></span><p>A team of dedicated and experienced faculty members guiding students towards success.</p></article>
+            <article class="commitment-card"><div class="commitment-icon">▥</div><h3>Holistic Development</h3><span class="card-rule"></span><p>Encouraging co-curricular activities, leadership and personal growth along with academics.</p></article>
+            <article class="commitment-card"><div class="commitment-icon">◎</div><h3>Student Success</h3><span class="card-rule"></span><p>Committed to helping students achieve their goals and build successful careers.</p></article>
+        </div>
+    </section>
+</main>
+{% endblock %}

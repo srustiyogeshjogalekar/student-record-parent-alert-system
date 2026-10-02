@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+{% block title %}Students | Alva's Degree College{% endblock %}
+{% block content %}
+<main class="listing-page">
+    <section class="page-heading">
+        <span class="eyebrow centered"><span></span>Student records<span></span></span>
+        <h1>{% if course %}{{ course }} students{% else %}Saved students{% endif %}</h1>
+</section>
+    {% if message %}<p class="login-success" role="status">{{ message }}</p>{% endif %}
+    {% if error %}<p class="login-error" role="alert">{{ error }}</p>{% endif %}
+    <form class="course-filter" method="get">
+        <label for="course">View course students</label>
+        <select id="course" name="course" onchange="this.form.submit()">
+            <option value="">All courses</option>
+            {% for available_course in ["BCA", "BBA", "BA", "BS", "B.Com", "B.Sc"] %}
+            <option value="{{ available_course }}" {% if course == available_course %}selected{% endif %}>{{ available_course }}</option>
+            {% endfor %}
+        </select>
+        <label for="sort">Sort by name</label>
+        <select id="sort" name="sort">
+            <option value="asc" {% if sort_order == "asc" %}selected{% endif %}>A-Z</option>
+            <option value="desc" {% if sort_order == "desc" %}selected{% endif %}>Z-A</option>
+        </select>
+    </form>
+    <div class="student-table-wrap">
+        <table class="student-table">
+            <thead><tr><th>Name</th><th>Register Number</th><th>Student Phone</th><th>Course</th><th>Year</th><th>Semester</th><th>Section</th><th>Parent Name</th><th>Parent Phone</th><th>Parent Email</th><th>Profile</th></tr></thead>
+            <tbody>
+                {% for student in students %}
+                <tr><td>{{ student.name }}</td><td>{{ student.register_number }}</td><td>{{ student.student_phone or '—' }}</td><td>{{ student.course }}</td><td>{{ student.year }}</td><td>{{ student.semester or '—' }}</td><td>{{ student.section or '—' }}</td><td>{{ student.parent_name or '—' }}</td><td>{{ student.parent_phone or '—' }}</td><td>{{ student.parent_email or '—' }}</td><td><a href="{{ url_for('student_profile', register_number=student.register_number) }}">View</a></td></tr>
+                {% else %}<tr><td colspan="11">No students saved yet.</td></tr>{% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <a class="back-corner-button" href="{{ url_for('faculty_dashboard') }}">← Back to Dashboard</a>
+</main>
+{% endblock %}

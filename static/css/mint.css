@@ -1,0 +1,674 @@
+/* Mint Fresh green theme for the Excel Upload & Student Records module */
+:root {
+    --mint-ink: #15352b;
+    --mint-muted: #587168;
+    --mint-forest: #0f523b;
+    --mint-mint: #e9f5ee;
+    --mint-mint-dark: #cce9d9;
+    --mint-cream: #f8fcf9;
+    --mint-line: rgba(21, 53, 43, 0.14);
+    --mint-white: #ffffff;
+    --mint-green: #078d55;
+    --mint-green-dark: #056f43;
+    --mint-danger: #a52c2c;
+}
+
+.mint-page {
+    min-height: 100vh;
+    background: #f5fbf8;
+    color: var(--mint-ink);
+    font-family: "DM Sans", sans-serif;
+}
+
+.mint-shell {
+    display: flex;
+    min-height: 100vh;
+}
+
+.mint-sidebar {
+    flex: 0 0 210px;
+    flex-direction: column;
+    border-right: 1px solid #e1eee8;
+    background: #f9fdfb;
+    display: flex;
+}
+
+.mint-brand {
+    display: block;
+    height: 112px;
+    padding: 16px 18px;
+    border-bottom: 1px solid #e8f1ed;
+}
+
+.mint-brand img {
+    width: 155px;
+    height: 78px;
+    object-fit: contain;
+    mix-blend-mode: multiply;
+}
+
+.mint-nav {
+    display: grid;
+    gap: 5px;
+    padding: 26px 11px;
+}
+
+.mint-nav-link,
+.mint-logout {
+    display: flex;
+    align-items: center;
+    gap: 13px;
+    min-height: 42px;
+    padding: 0 14px;
+    border-radius: 7px;
+    color: #263b36;
+    font-size: 0.82rem;
+    text-decoration: none;
+}
+
+.mint-nav-link:hover,
+.mint-nav-link.active {
+    color: #11834f;
+    background: #ddf4e9;
+}
+
+.mint-nav-symbol {
+    width: 18px;
+    color: #17604a;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+.mint-logout {
+    margin: auto 20px 30px;
+    padding-left: 0;
+    border-top: 1px solid #e0ece7;
+    border-radius: 0;
+    padding-top: 26px;
+}
+
+.mint-main {
+    flex: 1;
+    min-width: 0;
+}
+
+.mint-topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+    padding: 0 29px;
+    border-bottom: 1px solid #e5efeb;
+    background: rgba(255, 255, 255, 0.8);
+}
+
+.mint-faculty-profile {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.86rem;
+}
+
+.mint-avatar {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    color: #fff;
+    background: #168154;
+    font-size: 1.1rem;
+}
+
+.mint-content {
+    width: min(930px, calc(100% - 40px));
+    margin: 0 auto;
+    padding: 25px 0 40px;
+}
+
+.mint-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 21px;
+}
+
+.mint-heading h1 {
+    margin: 0;
+    color: #202a2c;
+    font: 700 1.3rem "DM Sans", sans-serif;
+}
+
+.mint-heading p {
+    margin: 4px 0 0;
+    color: #76827f;
+    font-size: 0.73rem;
+}
+
+.mint-card {
+    padding: 24px;
+    border: 1px solid #e7efec;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 5px 18px rgba(36, 90, 69, 0.06);
+}
+
+.mint-card h2 {
+    margin: 0 0 6px;
+    color: #20282a;
+    font-size: 1rem;
+}
+
+.mint-card .mint-subtitle {
+    margin: 0 0 20px;
+    color: #5f7367;
+    font-size: 0.82rem;
+}
+
+.result-table { width: 100%; border-collapse: collapse; font-size: .8rem; }
+.result-table th, .result-table td { padding: 11px 12px; border: 1px solid #dceee4; text-align: left; }
+.result-table th { background: #eefaf3; color: #1a382f; font-weight: 700; }
+.result-marks-table { min-width: 760px; }
+.result-marks-table td:not(:nth-child(2)), .result-marks-table th:not(:nth-child(2)), .result-summary-table td { text-align: center; }
+.result-summary-table { width: min(390px, 100%); margin-top: 20px; }
+
+/* Upload zone */
+.mint-dropzone {
+    display: grid;
+    place-items: center;
+    gap: 12px;
+    padding: 46px 20px;
+    border: 2px dashed #b9e4ce;
+    border-radius: 12px;
+    background: #f7fbf9;
+    text-align: center;
+    transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.mint-dropzone.dragover {
+    border-color: #078d55;
+    background: #eefaf3;
+}
+
+.mint-dropzone-icon {
+    font-size: 2.6rem;
+    color: #078d55;
+}
+
+.mint-dropzone p {
+    margin: 0;
+    color: #4c5d54;
+    font-size: 0.9rem;
+}
+
+.mint-dropzone small {
+    color: #8a9491;
+    font-size: 0.72rem;
+}
+
+.mint-file-input {
+    display: none;
+}
+
+.mint-browse-btn {
+    padding: 10px 18px;
+    border: 1px solid #078d55;
+    border-radius: 6px;
+    color: #fff;
+    background: #078d55;
+    font: 700 0.85rem "DM Sans", sans-serif;
+    cursor: pointer;
+}
+
+.mint-browse-btn:hover {
+    background: #056f43;
+}
+
+.mint-file-name {
+    display: none;
+    margin-top: 4px;
+    color: #078d55;
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.mint-import-btn {
+    display: block;
+    width: 100%;
+    margin-top: 18px;
+    padding: 13px;
+    border: 0;
+    border-radius: 6px;
+    color: #fff;
+    background: #078d55;
+    font: 700 0.95rem "DM Sans", sans-serif;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.mint-import-btn:hover {
+    background: #056f43;
+    transform: translateY(-1px);
+}
+
+.mint-import-btn:disabled {
+    background: #9cc9b2;
+    cursor: not-allowed;
+}
+
+/* Messages */
+.mint-message {
+    padding: 12px 14px;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 18px;
+}
+
+.mint-message.success {
+    color: #087d4b;
+    background: #e6f8ee;
+}
+
+.mint-message.error {
+    color: #a52c2c;
+    background: #ffeded;
+}
+
+/* Student records */
+.mint-search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.mint-search-bar input {
+    flex: 1;
+    min-width: 0;
+    padding: 12px 14px;
+    border: 1px solid #d8e4df;
+    border-radius: 8px;
+    color: #263b36;
+    background: #fff;
+    font: 0.88rem "DM Sans", sans-serif;
+    outline: none;
+}
+
+.mint-search-bar input:focus {
+    border-color: #5b9d7b;
+    box-shadow: 0 0 0 3px rgba(91, 157, 123, 0.14);
+}
+
+.mint-count {
+    color: #687773;
+    font-size: 0.78rem;
+    white-space: nowrap;
+}
+
+.mint-table-wrap {
+    overflow-x: auto;
+    border: 1px solid #e7efec;
+    border-radius: 10px;
+}
+
+.mint-table {
+    width: 100%;
+    border-collapse: collapse;
+    min-width: 720px;
+    text-align: left;
+    font-size: 0.82rem;
+}
+
+.mint-table th,
+.mint-table td {
+    padding: 12px 14px;
+    border-bottom: 1px solid #edf2ef;
+}
+
+.mint-table th {
+    color: #078d55;
+    background: #f0faf5;
+    font-size: 0.7rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+}
+
+.mint-table tr:last-child td {
+    border-bottom: 0;
+}
+
+.mint-table tbody tr:hover {
+    background: #f7fbf9;
+}
+
+.mint-empty {
+    padding: 30px !important;
+    color: #71837c;
+    text-align: center;
+}
+
+.mint-back-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-top: 20px;
+    color: #078d55;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.mint-back-link:hover {
+    color: #056f43;
+}
+
+/* Total Students summary card */
+.mint-stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.mint-stat-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 18px 20px;
+    border: 1px solid #e7efec;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.94);
+    box-shadow: 0 5px 18px rgba(36, 90, 69, 0.06);
+}
+
+.mint-stat-icon {
+    display: grid;
+    place-items: center;
+    width: 46px;
+    height: 46px;
+    border-radius: 10px;
+    background: #e6f8ee;
+    font-size: 1.5rem;
+}
+
+.mint-stat-card strong {
+    display: block;
+    color: #15352b;
+    font-size: 1.6rem;
+    line-height: 1.1;
+}
+
+.mint-stat-card span {
+    color: #6b7d75;
+    font-size: 0.78rem;
+}
+
+/* Filters + search controls */
+.mint-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 18px;
+}
+
+.mint-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.mint-select {
+    padding: 11px 14px;
+    border: 1px solid #d8e4df;
+    border-radius: 8px;
+    color: #263b36;
+    background: #fff;
+    font: 0.88rem "DM Sans", sans-serif;
+    outline: none;
+    cursor: pointer;
+}
+
+.mint-select:focus {
+    border-color: #5b9d7b;
+    box-shadow: 0 0 0 3px rgba(91, 157, 123, 0.14);
+}
+
+.mint-search-bar {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 240px;
+}
+
+/* Delete Selected Student bar + button */
+.mint-delete-bar {
+    display: flex;
+    justify-content: flex-end;
+    margin-bottom: 16px;
+}
+
+.mint-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding: 11px 18px;
+    border: 1px solid transparent;
+    border-radius: 8px;
+    font: 700 0.85rem "DM Sans", sans-serif;
+    cursor: pointer;
+    transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.mint-btn-danger {
+    color: #fff;
+    background: var(--mint-danger);
+    border-color: var(--mint-danger);
+}
+
+.mint-btn-danger:hover {
+    background: #8a2323;
+    transform: translateY(-1px);
+}
+
+/* Inline error message (no student selected) */
+.mint-inline-message {
+    padding: 11px 14px;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    margin-bottom: 16px;
+}
+
+.mint-inline-error {
+    color: #a52c2c;
+    background: #ffeded;
+    border: 1px solid #f3c1c1;
+}
+
+/* Checkbox column */
+.mint-check-col {
+    width: 40px;
+    text-align: center;
+}
+
+.mint-check-col input[type="checkbox"] {
+    width: 17px;
+    height: 17px;
+    accent-color: #078d55;
+    cursor: pointer;
+}
+
+/* Action buttons (View / Edit) */
+.mint-action {
+    display: inline-block;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.76rem;
+    font-weight: 700;
+    text-decoration: none;
+}
+
+.mint-action-view {
+    color: #078d55;
+    background: #e6f8ee;
+    border: 1px solid #bfe6d2;
+}
+
+.mint-action-view:hover {
+    background: #078d55;
+    color: #fff;
+}
+
+.mint-action-edit {
+    color: #0a5c8a;
+    background: #e8f4fb;
+    border: 1px solid #c3e2f2;
+}
+
+.mint-action-edit:hover {
+    background: #0a5c8a;
+    color: #fff;
+}
+
+@media (max-width: 680px) {
+    .mint-controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .mint-filters {
+        width: 100%;
+    }
+    .mint-select {
+        flex: 1;
+    }
+}
+
+/* Student profile view */
+.mint-profile-head {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-bottom: 22px;
+    border-bottom: 1px solid #edf2ef;
+}
+
+.mint-profile-avatar {
+    display: grid;
+    place-items: center;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    background: #078d55;
+    color: #fff;
+    font-size: 1.5rem;
+    font-weight: 700;
+    object-fit: cover;
+}
+
+.mint-profile-head h2 {
+    margin: 0;
+    color: #20282a;
+    font-size: 1.25rem;
+}
+
+.mint-muted {
+    margin: 4px 0 0;
+    color: #6b7d75;
+    font-size: 0.85rem;
+}
+
+.mint-profile-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 14px;
+    margin-top: 24px;
+}
+
+.mint-profile-item {
+    padding: 16px;
+    border: 1px solid #e7efec;
+    border-radius: 10px;
+    background: #f7fbf9;
+}
+
+.mint-profile-item span {
+    display: block;
+    color: #6b7d75;
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+.mint-profile-item strong {
+    display: block;
+    margin-top: 6px;
+    color: #15352b;
+    font-size: 0.92rem;
+}
+
+.mint-profile-actions {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-top: 24px;
+}
+
+/* Edit form */
+.mint-form {
+    display: grid;
+    gap: 12px;
+}
+
+.mint-form label {
+    color: #15352b;
+    font-size: 0.82rem;
+    font-weight: 700;
+    margin-top: 8px;
+}
+
+.mint-form input,
+.mint-form select {
+    width: 100%;
+    padding: 11px 13px;
+    border: 1px solid #d8e4df;
+    border-radius: 8px;
+    color: #263b36;
+    background: #fff;
+    font: 0.86rem "DM Sans", sans-serif;
+    outline: none;
+}
+
+.mint-form input:focus,
+.mint-form select:focus {
+    border-color: #5b9d7b;
+    box-shadow: 0 0 0 3px rgba(91, 157, 123, 0.14);
+}
+
+.mint-form input[disabled] {
+    background: #f0f5f2;
+    color: #7a8b84;
+    cursor: not-allowed;
+}
+
+@media (max-width: 680px) {
+    .mint-sidebar {
+        flex-basis: 180px;
+    }
+    .mint-content {
+        width: calc(100% - 28px);
+    }
+}
+
+/* Timetable administration */
+.timetable-admin-spaced { margin-top: 18px; }
+.timetable-admin-message { padding: 11px 14px; border-radius: 7px; color: #087d4b; background: #e6f8ee; font-size: .84rem; }
+.timetable-admin-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 13px; align-items: end; }
+.timetable-admin-grid label { display: grid; gap: 6px; color: #263b36; font-size: .75rem; font-weight: 700; }
+.timetable-admin-grid input, .timetable-admin-grid select { min-width: 0; padding: 9px 10px; border: 1px solid #d8e4df; border-radius: 6px; color: #263b36; background: #fff; font: .8rem "DM Sans", sans-serif; }
+.timetable-admin-filters { margin-top: 16px; }
+.timetable-admin-table-wrap { overflow-x: auto; margin-top: 14px; }
+.timetable-delete-btn { padding: 7px 10px; border: 0; border-radius: 5px; color: #fff; background: #b43c3c; font: 700 .72rem "DM Sans", sans-serif; cursor: pointer; }
+.timetable-check { display: flex !important; align-items: center; min-height: 38px; gap: 8px; font-weight: 500 !important; }
+.timetable-check input { min-width: auto !important; }

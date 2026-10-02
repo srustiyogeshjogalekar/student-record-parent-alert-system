@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+{% set active_page = 'courses' %}
+{% block title %}Courses | Alva's Degree College{% endblock %}
+{% block content %}
+<main class="listing-page courses-page">
+    <div class="page-heading">
+        <span class="eyebrow centered"><span></span> Academic pathways <span></span></span>
+        <h1>Our Courses</h1>
+        <p>Explore the courses available at Alva's Degree College.</p>
+    </div>
+    <div class="course-grid">
+        <article class="course-card"><div class="course-icon">BCA</div><div><h2>BCA</h2><span class="card-rule"></span><h3>Bachelor of<br>Computer Applications</h3><p>A professional course focused on computer applications and software development.</p></div></article>
+        <article class="course-card"><div class="course-icon">BBA</div><div><h2>BBA</h2><span class="card-rule"></span><h3>Bachelor of<br>Business Administration</h3><p>Empowering students with business knowledge and leadership skills.</p></div></article>
+        <article class="course-card"><div class="course-icon">B.Com</div><div><h2>B.Com</h2><span class="card-rule"></span><h3>Bachelor of<br>Commerce</h3><p>Building strong foundation in commerce, finance and accounting.</p></div></article>
+        <article class="course-card"><div class="course-icon">BA</div><div><h2>BA</h2><span class="card-rule"></span><h3>Bachelor of<br>Arts</h3><p>Exploring humanities, social sciences and languages.</p></div></article>
+        <article class="course-card"><div class="course-icon">B.Sc</div><div><h2>B.Sc</h2><span class="card-rule"></span><h3>Bachelor of<br>Science</h3><p>Focus on science subjects and practical knowledge.</p></div></article>
+    </div>
+</main>
+{% endblock %}

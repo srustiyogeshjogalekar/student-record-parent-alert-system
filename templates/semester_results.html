@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Semester Results | Alva's Degree College</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mint.css') }}">
+</head>
+<body class="mint-page">
+    <div class="mint-shell">
+        <aside class="mint-sidebar">
+            <a class="mint-brand" href="{{ url_for('faculty_dashboard') }}">
+                <img src="{{ url_for('static', filename='images.jpg') }}" alt="Alva's Degree College logo">
+            </a>
+            <nav class="mint-nav" aria-label="Faculty navigation">
+                <a class="mint-nav-link" href="{{ url_for('faculty_dashboard') }}"><span class="mint-nav-symbol">⌂</span>Dashboard</a>
+                <a class="mint-nav-link" href="{{ url_for('new_student') }}"><span class="mint-nav-symbol">♙</span>Add Student</a>
+                <a class="mint-nav-link" href="{{ url_for('student_records') }}"><span class="mint-nav-symbol">▣</span>Student Records</a>
+                <a class="mint-nav-link" href="{{ url_for('internal_marks') }}"><span class="mint-nav-symbol">▤</span>Internal Marks</a>
+                <a class="mint-nav-link active" href="{{ url_for('semester_results', course=course, year=year, semester=semester) }}"><span class="mint-nav-symbol">▥</span>Semester Results</a>
+            </nav>
+            <a class="mint-logout" href="{{ url_for('home') }}"><span class="mint-nav-symbol">↪</span>Logout</a>
+        </aside>
+
+        <main class="mint-main">
+            <header class="mint-topbar">
+                <div class="mint-faculty-profile">
+                    <span class="mint-avatar">F</span>
+                    <span><strong>Faculty</strong></span>
+                </div>
+            </header>
+
+            <div class="mint-content">
+                <div class="mint-heading">
+                    <div>
+                        <h1>Semester Results</h1>
+                        <p>Marks, percentage, grade, PASS/FAIL, SGPA, and CGPA for {{ course }} · {{ year }} · {{ semester }}</p>
+                    </div>
+                </div>
+
+                <section class="mint-card" style="margin-bottom: 18px;">
+                    <form method="get" action="{{ url_for('semester_results') }}" style="display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr)); gap: 12px; align-items:end;">
+                        <label>
+                            <div style="font-size:0.77rem; color:#50675f; font-weight:600; margin-bottom:6px;">Course</div>
+                            <select name="course" style="width:100%; padding: 10px 12px; border:1px solid #c9e4d4; border-radius:8px; background:#fff;">
+                                {% for option in courses %}
+                                <option value="{{ option }}" {% if option == course %}selected{% endif %}>{{ option }}</option>
+                                {% endfor %}
+                            </select>
+                        </label>
+                        <label>
+                            <div style="font-size:0.77rem; color:#50675f; font-weight:600; margin-bottom:6px;">Year</div>
+                            <select name="year" style="width:100%; padding: 10px 12px; border:1px solid #c9e4d4; border-radius:8px; background:#fff;">
+                                {% for option in years %}
+                                <option value="{{ option }}" {% if option == year %}selected{% endif %}>{{ option }}</option>
+                                {% endfor %}
+                            </select>
+                        </label>
+                        <label>
+                            <div style="font-size:0.77rem; color:#50675f; font-weight:600; margin-bottom:6px;">Semester</div>
+                            <select name="semester" style="width:100%; padding: 10px 12px; border:1px solid #c9e4d4; border-radius:8px; background:#fff;">
+                                {% for option in semesters %}
+                                <option value="{{ option }}" {% if option == semester %}selected{% endif %}>{{ option }}</option>
+                                {% endfor %}
+                            </select>
+                        </label>
+                        <button type="submit" class="mint-browse-btn" style="height:42px; margin-top:26px;">Load Results</button>
+                    </form>
+                </section>
+
+                {% for result in results %}
+                <section class="mint-card" style="margin-bottom:18px;">
+                    <h2>Student Details</h2>
+                    <div style="overflow-x:auto;"><table class="result-table"><tbody><tr><th>Register Number</th><td>{{ result.register_number }}</td><th>Student Name</th><td>{{ result.name }}</td></tr><tr><th>Course</th><td>{{ result.course }}</td><th>Semester</th><td>{{ result.semester }}</td></tr><tr><th>Section</th><td colspan="3">{{ result.section }}</td></tr></tbody></table></div>
+                    <h2 style="margin-top:22px;">Subject-wise Semester Result</h2>
+                    <div style="overflow-x:auto;"><table class="result-table result-marks-table"><thead><tr><th>Sl. No.</th><th>Subject</th><th>Internal 1</th><th>Internal 2</th><th>Assignment</th><th>Attendance</th><th>Total</th><th>Grade</th></tr></thead><tbody>{% for subject in result.subjects %}<tr><td>{{ loop.index }}</td><td>{{ subject.subject }}</td><td>{{ subject.first_internal }}/25</td><td>{{ subject.second_internal }}/50</td><td>{{ subject.assignment_1 }}/5</td><td>{{ subject.attendance_marks }}/5</td><td>{{ subject.total_marks }}/85</td><td>{{ subject.grade }}</td></tr>{% endfor %}</tbody></table></div>
+                    <table class="result-table result-summary-table"><tbody><tr><th>Total Marks</th><td>{{ result.total_marks }}</td></tr><tr><th>Maximum Marks</th><td>{{ result.maximum_marks }}</td></tr><tr><th>Percentage</th><td>{{ result.overall_percentage }}%</td></tr><tr><th>SGPA</th><td>{{ result.sgpa }}</td></tr><tr><th>CGPA</th><td>{{ result.cgpa }}</td></tr><tr><th>Result</th><td style="font-weight:700; color:{% if result.result_status == 'PASS' %}#156148{% else %}#a52c2c{% endif %};">{{ result.result_status }}</td></tr></tbody></table>
+                </section>
+                {% else %}<section class="mint-card"><p style="margin:0; color:#697a73; text-align:center;">No student results found for the selected course, year, and semester.</p></section>{% endfor %}
+
+                <a class="mint-back-link" href="{{ url_for('faculty_dashboard') }}">← Back to Dashboard</a>
+            </div>
+        </main>
+    </div>
+</body>
+</html>
+

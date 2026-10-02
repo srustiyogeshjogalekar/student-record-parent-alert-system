@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+{% set active_page = '' %}
+{% block title %}Faculty Login | Alva's Degree College{% endblock %}
+{% block content %}
+<main class="login-page">
+    <section class="login-card" aria-labelledby="faculty-login-title">
+        {% if logged_in %}
+            <div class="login-icon success-icon" aria-hidden="true">✓</div>
+            <h1 id="faculty-login-title">Welcome, Faculty</h1>
+            <p class="login-subtitle">You have successfully signed in to the faculty portal.</p>
+            <a class="login-submit back-home" href="{{ url_for('home') }}">Return to Home</a>
+        {% else %}
+            <div class="login-icon" aria-hidden="true">
+                <svg viewBox="0 0 48 48" role="img"><circle cx="24" cy="15" r="7"></circle><path d="M11 38c0-7 5.8-11 13-11s13 4 13 11"></path></svg>
+            </div>
+            <h1 id="faculty-login-title">Faculty Login</h1>
+            <p class="login-subtitle">Welcome! Please login to your account</p>
+            {% if error %}<p class="login-error" role="alert">{{ error }}</p>{% endif %}
+            <form method="post" class="login-form">
+                <label for="username">Username</label>
+                <div class="input-wrap">
+                    <svg class="input-icon" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c0-4 3.5-6 8-6s8 2 8 6"></path></svg>
+                    <input id="username" name="username" type="text" autocomplete="username" required>
+                </div>
+                <label for="password">Password</label>
+                <div class="input-wrap">
+                    <svg class="input-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="10" width="14" height="10" rx="2"></rect><path d="M8 10V7a4 4 0 0 1 8 0v3"></path></svg>
+                    <input id="password" name="password" type="password" autocomplete="current-password" required>
+                    <button class="password-toggle" type="button" aria-label="Show password">
+                        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12Z"></path><circle cx="12" cy="12" r="2.5"></circle></svg>
+                    </button>
+                </div>
+                <button class="login-submit" type="submit">Login</button>
+            </form>
+        {% endif %}
+    </section>
+</main>
+{% endblock %}

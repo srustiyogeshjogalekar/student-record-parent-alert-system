@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Records | Alva's Degree College</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mint.css') }}">
+</head>
+<body class="mint-page">
+    <div class="mint-shell">
+        <aside class="mint-sidebar">
+            <a class="mint-brand" href="{{ url_for('faculty_dashboard') }}">
+                <img src="{{ url_for('static', filename='images.jpg') }}" alt="Alva's Degree College logo">
+            </a>
+            <nav class="mint-nav" aria-label="Faculty navigation">
+                <a class="mint-nav-link" href="{{ url_for('faculty_dashboard') }}"><span class="mint-nav-symbol">⌂</span>Dashboard</a>
+                <a class="mint-nav-link" href="{{ url_for('new_student') }}"><span class="mint-nav-symbol">♙</span>Add Student</a>
+                <a class="mint-nav-link active" href="{{ url_for('student_records') }}"><span class="mint-nav-symbol">▣</span>Student Records</a>
+                <a class="mint-nav-link" href="{{ url_for('faculty_dashboard') }}#attendance"><span class="mint-nav-symbol">▣</span>Attendance</a>
+                <a class="mint-nav-link" href="{{ url_for('internal_marks') }}"><span class="mint-nav-symbol">▤</span>Internal Marks</a>
+            </nav>
+            <a class="mint-logout" href="{{ url_for('home') }}"><span class="mint-nav-symbol">↪</span>Logout</a>
+        </aside>
+
+        <main class="mint-main">
+            <header class="mint-topbar">
+                <div class="mint-faculty-profile">
+                    <span class="mint-avatar">F</span>
+                    <span><strong>Faculty</strong></span>
+                </div>
+            </header>
+
+            <div class="mint-content">
+                <div class="mint-heading">
+                    <div>
+                        <h1>Student Records</h1>
+                        <p>All imported students, searchable and filterable in real time.</p>
+                    </div>
+                </div>
+
+{% if message %}
+                <div class="mint-message {{ message_type }}" role="status">{{ message }}</div>
+                {% endif %}
+
+                <div class="mint-inline-message mint-inline-error" id="delete-error" role="alert" style="display:none;">Please select a student to delete.</div>
+
+                <!-- Total Students summary card -->
+                <section class="mint-stats-row">
+                    <div class="mint-stat-card">
+                        <span class="mint-stat-icon">🎓</span>
+                        <div>
+                            <strong id="total-students">{{ total_students }}</strong>
+                            <span>Total Students</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="mint-card">
+                    <div class="mint-delete-bar">
+                        <button type="button" id="delete-selected-btn" class="mint-btn mint-btn-danger">🗑 Delete Selected Student</button>
+                    </div>
+
+                    <!-- Filter dropdowns + search bar -->
+                    <div class="mint-controls">
+                        <div class="mint-filters">
+                            <select id="filter-course" class="mint-select">
+                                <option value="">All Courses</option>
+                                {% for c in ['BCA', 'BBA', 'B.Com', 'BA', 'B.Sc'] %}
+                                <option value="{{ c }}">{{ c }}</option>
+                                {% endfor %}
+                            </select>
+                            <select id="filter-year" class="mint-select">
+                                <option value="">All Years</option>
+                                <option value="1st Year">1st Year</option>
+                                <option value="2nd Year">2nd Year</option>
+                                <option value="3rd Year">3rd Year</option>
+                            </select>
+                            <select id="filter-section" class="mint-select">
+                                <option value="">All Sections</option>
+                                <option value="A">A</option>
+                                <option value="B">B</option>
+                                <option value="C">C</option>
+                            </select>
+                        </div>
+                        <div class="mint-search-bar">
+                            <input id="student-search" type="search" placeholder="Search any student detail…" autocomplete="off">
+                            <span id="student-count" class="mint-count">{{ students|length }} of {{ students|length }} student(s)</span>
+                        </div>
+                    </div>
+
+<form id="delete-student-form" method="post" action="{{ url_for('student_delete') }}">
+                        <div class="mint-table-wrap">
+                            <table class="mint-table">
+                                <thead>
+                                    <tr>
+                                        <th class="mint-check-col"><input type="checkbox" id="select-all" title="Select all students"></th>
+                                        <th>Name</th>
+                                        <th>Register Number</th>
+                                        <th>Student Phone</th>
+                                        <th>Course</th>
+                                        <th>Year</th>
+                                        <th>Semester</th>
+                                        <th>Section</th>
+                                        <th>Parent Name</th>
+                                        <th>Parent Phone</th>
+                                        <th>Parent Email</th>
+                                        <th>View</th>
+                                        <th>Edit</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="students-table-body">
+                                    {% for student in students %}
+                                    <tr
+                                        data-name="{{ student.name | lower }}"
+                                        data-register="{{ student.register_number | lower }}"
+                                        data-phone="{{ student.student_phone | lower }}"
+                                        data-course="{{ student.course | lower }}"
+                                        data-year="{{ student.year | lower }}"
+                                        data-section="{{ student.section | lower }}">
+                                        <td class="mint-check-col"><input type="checkbox" class="student-check" value="{{ student.register_number }}"></td>
+                                        <td>{{ student.name }}</td>
+                                        <td>{{ student.register_number }}</td>
+                                        <td>{{ student.student_phone or '—' }}</td>
+                                        <td>{{ student.course }}</td>
+                                        <td>{{ student.year }}</td>
+                                        <td>{{ student.semester or '—' }}</td>
+                                        <td>{{ student.section or '—' }}</td>
+                                        <td>{{ student.parent_name or '—' }}</td>
+                                        <td>{{ student.parent_phone or '—' }}</td>
+                                        <td>{{ student.parent_email or '—' }}</td>
+                                        <td><a class="mint-action mint-action-view" href="{{ url_for('student_profile', register_number=student.register_number) }}">View</a></td>
+                                        <td><a class="mint-action mint-action-edit" href="{{ url_for('student_edit', register_number=student.register_number) }}">Edit</a></td>
+                                    </tr>
+                                    {% else %}
+                                    <tr id="no-students-row"><td colspan="13" class="mint-empty">No students imported yet. Upload a file to get started.</td></tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </form>
+                </section>
+
+                <a class="mint-back-link" href="{{ url_for('new_student') }}">← Add Student</a>
+            </div>
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='js/student_records.js') }}"></script>
+</body>
+</html>

@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+{% block title %}Add Student | Alva's Degree College{% endblock %}
+{% block content %}
+<div class="dashboard-shell student-workspace">
+    <aside class="dashboard-sidebar">
+        <a class="dashboard-brand" href="{{ url_for('faculty_dashboard') }}">
+            <img src="{{ url_for('static', filename='images.jpg') }}" alt="Alva's Degree College logo">
+        </a>
+        <nav class="dashboard-nav" aria-label="Faculty navigation">
+            <a class="dashboard-nav-link" href="{{ url_for('faculty_dashboard') }}"><span class="nav-symbol">⌂</span>Dashboard</a>
+            <details class="dashboard-add-menu" open>
+                <summary class="dashboard-nav-link active"><span class="nav-symbol">♙</span>Add Student <span class="menu-chevron">⌄</span></summary>
+                <div class="course-dropdown" aria-label="Choose student course">
+                    <a class="dashboard-nav-link" href="{{ url_for('new_student') }}">New Student</a>
+                    <a class="dashboard-nav-link" href="{{ url_for('students', course=student.course) if student.course else url_for('students') }}">Student Records</a>
+                </div>
+            </details>
+            <a class="dashboard-nav-link" href="{{ url_for('faculty_dashboard') }}#attendance"><span class="nav-symbol">▣</span>Attendance</a>
+            <a class="dashboard-nav-link" href="{{ url_for('students', course=student.course) if student.course else url_for('students') }}"><span class="nav-symbol">▣</span>Student Records</a>
+            <a class="dashboard-nav-link" href="{{ url_for('faculty_dashboard') }}#marks"><span class="nav-symbol">▤</span>Internal Marks</a>
+            <a class="dashboard-nav-link" href="{{ url_for('faculty_dashboard') }}#results"><span class="nav-symbol">▥</span>Semester Results</a>
+            <a class="dashboard-nav-link" href="{{ url_for('faculty_dashboard') }}#alerts"><span class="nav-symbol">◈</span>Parent Alert</a>
+            <a class="dashboard-nav-link" href="{{ url_for('faculty_dashboard') }}#events"><span class="nav-symbol">▣</span>Event Coordinator</a>
+            <a class="dashboard-nav-link" href="{{ url_for('faculty_dashboard') }}#reports"><span class="nav-symbol">▧</span>Attendance Reports</a>
+        </nav>
+        <a class="dashboard-logout" href="{{ url_for('home') }}"><span class="nav-symbol">↪</span>Logout</a>
+    </aside>
+
+    <main class="dashboard-main student-form-main">
+        <header class="dashboard-topbar">
+            <button class="sidebar-toggle" type="button" aria-label="Toggle navigation">☰</button>
+            <div class="faculty-profile">
+                <span class="profile-avatar">F</span>
+                <span><strong>Faculty</strong><small>Computer Science</small></span>
+                <span class="profile-chevron">⌄</span>
+            </div>
+        </header>
+        <div class="student-form-content">
+            <section class="page-heading">
+                <span class="eyebrow centered"><span></span>Student records<span></span></span>
+                <h1>Add New Student</h1>
+                <p>Add one student manually, or import an Excel file here.</p>
+                <a class="secondary-action" href="{{ url_for('admin_dashboard') }}">← Back to Admin Dashboard</a>
+            </section>
+            {% if message %}<p class="attendance-message {{ 'error' if message_type == 'error' else 'success' }}" role="status">{{ message }}</p>{% endif %}
+            <section class="recent-students" aria-labelledby="import-students-title">
+                <div class="recent-students-heading"><div><span class="eyebrow"><span></span>Excel import</span><h2 id="import-students-title">Add Students from Excel</h2><p>Required: Reg No, Student Name, Course, Year, Semester, Section, Parent Name, Parent Phone. Student Phone and Parent Email are optional.</p></div></div>
+                <form class="student-form" method="post" action="{{ url_for('import_students_excel') }}" enctype="multipart/form-data">
+                    <label for="student_excel">Student Excel file (.xlsx)</label>
+                    <input id="student_excel" name="file" type="file" accept=".xlsx" required>
+                    <button class="login-submit" type="submit">Import Students from Excel</button>
+                </form>
+            </section>
+            <form class="student-form" method="post" enctype="multipart/form-data">
+                {% if error %}<p class="login-error" role="alert">{{ error }}</p>{% endif %}
+                <label for="name">Student name</label>
+                <input id="name" name="name" value="{{ student.get('name', '') }}" required>
+                <label for="register_number">Register number</label>
+                <input id="register_number" name="register_number" value="{{ student.get('register_number', '') }}" required>
+                <label for="student_phone">Student phone number</label>
+                <input id="student_phone" name="student_phone" type="tel" value="{{ student.get('student_phone', '') }}" autocomplete="tel" pattern="\d{10}" maxlength="10" inputmode="numeric" required>
+                <label for="course">Course</label>
+                <input id="course" name="course" value="{{ student.get('course', '') }}" placeholder="BCA" required>
+                <label for="year">Year</label>
+                <select id="year" name="year" required>
+                    <option value="">Choose year</option>
+                    {% for year in ['1st Year', '2nd Year', '3rd Year'] %}
+                    <option {% if student.get('year') == year %}selected{% endif %}>{{ year }}</option>
+                    {% endfor %}
+                </select>
+                <label for="parent_name">Parent name</label>
+                <input id="parent_name" name="parent_name" value="{{ student.get('parent_name', '') }}" required>
+                <label for="parent_phone">Parent phone</label>
+                <input id="parent_phone" name="parent_phone" type="tel" value="{{ student.get('parent_phone', '') }}" pattern="\d{10}" maxlength="10" inputmode="numeric" required>
+                <label for="parent_email">Parent email</label>
+                <input id="parent_email" name="parent_email" type="email" value="{{ student.get('parent_email', '') }}" autocomplete="email">
+                
+                <button class="login-submit" type="submit">Save student</button>
+            </form>
+            <section class="recent-students" aria-labelledby="recent-students-title">
+                <div class="recent-students-heading">
+                    <div>
+                        <span class="eyebrow"><span></span>Student records</span>
+                        <h2 id="recent-students-title">Recent Students</h2>
+                        <p>Recently added students will appear here.</p>
+                    </div>
+                    <a class="export-button" href="{{ url_for('export_students') }}">Download Excel</a>
+                </div>
+                <div class="student-table-wrap">
+                    <table class="student-table">
+                        <thead><tr><th>#</th><th>Name</th><th>Course</th><th>Year</th><th>Register Number</th><th>Phone Number</th><th>Parent Phone</th></tr></thead>
+                        <tbody>
+                            {% for saved_student in recent_students %}
+                            <tr><td>{{ loop.index }}</td><td>{{ saved_student.get('name', '') }}</td><td>{{ saved_student.get('course', '') }}</td><td>{{ saved_student.get('year', '') }}</td><td>{{ saved_student.get('register_number', '') }}</td><td>{{ saved_student.get('student_phone', '') }}</td><td>{{ saved_student.get('parent_phone', '') }}</td></tr>
+                            {% else %}<tr><td colspan="7">No students saved yet.</td></tr>{% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
+</div>
+{% endblock %}

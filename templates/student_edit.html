@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Student | Alva's Degree College</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mint.css') }}">
+</head>
+<body class="mint-page">
+    <div class="mint-shell">
+        <aside class="mint-sidebar">
+            <a class="mint-brand" href="{{ url_for('faculty_dashboard') }}">
+                <img src="{{ url_for('static', filename='images.jpg') }}" alt="Alva's Degree College logo">
+            </a>
+            <nav class="mint-nav" aria-label="Faculty navigation">
+                <a class="mint-nav-link" href="{{ url_for('faculty_dashboard') }}"><span class="mint-nav-symbol">⌂</span>Dashboard</a>
+                <a class="mint-nav-link" href="{{ url_for('new_student') }}"><span class="mint-nav-symbol">♙</span>Add Student</a>
+                <a class="mint-nav-link active" href="{{ url_for('student_records') }}"><span class="mint-nav-symbol">▣</span>Student Records</a>
+                <a class="mint-nav-link" href="{{ url_for('faculty_dashboard') }}#attendance"><span class="mint-nav-symbol">▣</span>Attendance</a>
+                <a class="mint-nav-link" href="{{ url_for('internal_marks') }}"><span class="mint-nav-symbol">▤</span>Internal Marks</a>
+            </nav>
+            <a class="mint-logout" href="{{ url_for('home') }}"><span class="mint-nav-symbol">↪</span>Logout</a>
+        </aside>
+
+        <main class="mint-main">
+            <header class="mint-topbar">
+                <div class="mint-faculty-profile">
+                    <span class="mint-avatar">F</span>
+                    <span><strong>Faculty</strong></span>
+                </div>
+            </header>
+
+            <div class="mint-content">
+                <div class="mint-heading">
+                    <div>
+                        <h1>Edit Student</h1>
+                        <p>Update the details for {{ student.name }}.</p>
+                    </div>
+                    <a class="mint-back-link" href="{{ url_for('student_profile', register_number=student.register_number) }}">← Back to Profile</a>
+                </div>
+
+                {% if error %}
+                <div class="mint-message error" role="alert">{{ error }}</div>
+                {% endif %}
+
+                <section class="mint-card">
+                    <form method="POST" class="mint-form">
+                        <label for="name">Student Name</label>
+                        <input id="name" name="name" type="text" value="{{ student.name }}" required>
+
+                        <label for="register_number">Register Number</label>
+                        <input id="register_number" name="register_number" type="text" value="{{ student.register_number }}" disabled>
+
+                        <label for="student_phone">Student Phone</label>
+                        <input id="student_phone" name="student_phone" type="tel" inputmode="numeric" pattern="\d{10}" maxlength="10" value="{{ student.student_phone }}" required>
+
+                        <label for="course">Course</label>
+                        <select id="course" name="course" required>
+                            <option value="">Select course</option>
+                            {% for c in ['BCA', 'BBA', 'B.Com', 'BA', 'B.Sc'] %}
+                            <option value="{{ c }}" {% if student.course == c %}selected{% endif %}>{{ c }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <label for="year">Year</label>
+                        <select id="year" name="year" required>
+                            <option value="">Select year</option>
+                            {% for y in ['1st Year', '2nd Year', '3rd Year'] %}
+                            <option value="{{ y }}" {% if student.year == y %}selected{% endif %}>{{ y }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <label for="semester">Semester</label>
+                        <input id="semester" name="semester" type="text" value="{{ student.semester }}" placeholder="e.g. I Semester">
+
+                        <label for="section">Section</label>
+                        <select id="section" name="section">
+                            <option value="">Select section</option>
+                            {% for s in ['A', 'B', 'C'] %}
+                            <option value="{{ s }}" {% if student.section == s %}selected{% endif %}>Section {{ s }}</option>
+                            {% endfor %}
+                        </select>
+
+                        <label for="parent_name">Parent Name</label>
+                        <input id="parent_name" name="parent_name" type="text" value="{{ student.parent_name }}" required>
+
+                        <label for="parent_phone">Parent Phone</label>
+                        <input id="parent_phone" name="parent_phone" type="tel" inputmode="numeric" pattern="\d{10}" maxlength="10" value="{{ student.parent_phone }}" required>
+                        <label for="parent_email">Parent Email</label>
+                        <input id="parent_email" name="parent_email" type="email" value="{{ student.parent_email or '' }}">
+
+                        <button class="mint-import-btn" type="submit" style="display:block;">Save Changes</button>
+                    </form>
+                </section>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

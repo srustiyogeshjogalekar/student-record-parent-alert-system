@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Alva's Degree College student portal">
+    <title>{% block title %}Alva's Degree College{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="page-shell">
+        <header class="site-header">
+            <a class="brand" href="{{ url_for('home') }}" aria-label="Alva's Degree College home">
+                <span class="brand-mark">A</span>
+                <span class="brand-copy"><strong>ALVA'S DEGREE</strong><span>COLLEGE</span></span>
+            </a>
+            <nav class="main-nav" aria-label="Main navigation">
+                <a class="{% if active_page == 'home' %}active{% endif %}" href="{{ url_for('home') }}">Home</a>
+                <a class="{% if active_page == 'about' %}active{% endif %}" href="{{ url_for('about') }}">About Us</a>
+                <a class="{% if active_page == 'contact' %}active{% endif %}" href="{{ url_for('contact') }}">Contact Us</a>
+                <a class="{% if active_page == 'courses' %}active{% endif %}" href="{{ url_for('courses') }}">Courses</a>
+            </nav>
+            <div class="header-actions">
+                <div class="login-menu">
+                    <button class="login-button" type="button" aria-expanded="false" aria-controls="login-options">Login <span class="chevron" aria-hidden="true">⌄</span></button>
+                    <div class="login-options" id="login-options" role="menu">
+                        <a href="{{ url_for('admin_login') }}" role="menuitem">Admin Login</a>
+                        <a href="{{ url_for('faculty_login') }}" role="menuitem">Faculty Login</a>
+                        <a href="{{ url_for('student_login') }}" role="menuitem">Student Login</a>
+                        <a href="{{ url_for('parent_login') }}" role="menuitem">Parent Login</a>
+                    </div>
+                </div>
+                <img class="college-logo" src="{{ url_for('static', filename='images.jpg') }}" alt="Alva's College, Moodubidire logo">
+            </div>
+        </header>
+        {% block content %}{% endblock %}
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>

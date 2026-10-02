@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+{% block title %}Students Failed in Each Subject | Admin{% endblock %}
+{% block content %}
+<main class="login-page"><section class="login-card" style="max-width:1200px"><h1>Students Failed in Each Subject</h1><p class="login-subtitle">Uses the same combined subject result as Semester Results: Internal 1 + Internal 2 + Assignment 1 + Attendance, with 50/85 required to pass.</p><div style="overflow-x:auto"><table class="result-table"><thead><tr><th>Register Number</th><th>Student Name</th><th>Course</th><th>Semester</th><th>Failed Subject</th><th>Exam Type</th><th>Marks Obtained</th><th>Maximum Marks</th><th>Overall Result</th></tr></thead><tbody>{% for row in rows %}<tr><td>{{row.register_number}}</td><td>{{row.name}}</td><td>{{row.course}}</td><td>{{row.semester or '—'}}</td><td>{{row.subject}}</td><td>{{row.exam_type}}</td><td style="color:#b93838;font-weight:700">{{row.marks_obtained}}</td><td>{{row.maximum_marks}}</td><td style="color:#b93838;font-weight:700">FAILED</td></tr>{% else %}<tr><td colspan="9">No failed students found in the existing marks data.</td></tr>{% endfor %}</tbody></table></div><p style="margin-top:20px"><a href="{{url_for('admin_dashboard')}}">← Back to Admin Dashboard</a></p></section></main>
+{% endblock %}
+

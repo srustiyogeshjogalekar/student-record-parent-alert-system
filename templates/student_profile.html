@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile | Alva's Degree College</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mint.css') }}">
+</head>
+<body class="mint-page">
+    <div class="mint-shell">
+        <aside class="mint-sidebar">
+            <a class="mint-brand" href="{{ url_for('faculty_dashboard') }}">
+                <img src="{{ url_for('static', filename='images.jpg') }}" alt="Alva's Degree College logo">
+            </a>
+            <nav class="mint-nav" aria-label="Faculty navigation">
+                <a class="mint-nav-link" href="{{ url_for('faculty_dashboard') }}"><span class="mint-nav-symbol">⌂</span>Dashboard</a>
+                <a class="mint-nav-link" href="{{ url_for('new_student') }}"><span class="mint-nav-symbol">♙</span>Add Student</a>
+                <a class="mint-nav-link active" href="{{ url_for('student_records') }}"><span class="mint-nav-symbol">▣</span>Student Records</a>
+                <a class="mint-nav-link" href="{{ url_for('faculty_dashboard') }}#attendance"><span class="mint-nav-symbol">▣</span>Attendance</a>
+                <a class="mint-nav-link" href="{{ url_for('internal_marks') }}"><span class="mint-nav-symbol">▤</span>Internal Marks</a>
+            </nav>
+            <a class="mint-logout" href="{{ url_for('home') }}"><span class="mint-nav-symbol">↪</span>Logout</a>
+        </aside>
+
+        <main class="mint-main">
+            <header class="mint-topbar">
+                <div class="mint-faculty-profile">
+                    <span class="mint-avatar">F</span>
+                    <span><strong>Faculty</strong></span>
+                </div>
+            </header>
+
+            <div class="mint-content">
+                <div class="mint-heading">
+                    <div>
+                        <h1>Student Profile</h1>
+                        <p>Complete overview of the selected student.</p>
+                    </div>
+                    <a class="mint-back-link" href="{{ url_for('student_records') }}">← Back to Records</a>
+                </div>
+
+                {% if request.args.get('message') %}
+                <div class="mint-message success" role="status">{{ request.args.get('message') }}</div>
+                {% endif %}
+
+                <section class="mint-card">
+                    <div class="mint-profile-head">
+                        {% if student.photo_filename %}
+                        <img class="mint-profile-avatar" src="{{ url_for('static', filename='uploads/' ~ student.photo_filename) }}" alt="{{ student.name }} photo">
+                        {% else %}
+                        <div class="mint-profile-avatar">{{ student.name[0] | upper }}</div>
+                        {% endif %}
+                        <div>
+                            <h2>{{ student.name }}</h2>
+                            <p class="mint-muted">{{ student.course }} · {{ student.year }}</p>
+                        </div>
+                    </div>
+
+                    <div class="mint-profile-grid">
+                        <div class="mint-profile-item">
+                            <span>Register Number</span>
+                            <strong>{{ student.register_number }}</strong>
+                        </div>
+                        <div class="mint-profile-item">
+                            <span>Student Phone</span>
+                            <strong>{{ student.student_phone }}</strong>
+                        </div>
+                        <div class="mint-profile-item">
+                            <span>Course</span>
+                            <strong>{{ student.course }}</strong>
+                        </div>
+                        <div class="mint-profile-item">
+                            <span>Year</span>
+                            <strong>{{ student.year }}</strong>
+                        </div>
+                        <div class="mint-profile-item">
+                            <span>Semester</span>
+                            <strong>{{ student.semester or '—' }}</strong>
+                        </div>
+                        <div class="mint-profile-item">
+                            <span>Section</span>
+                            <strong>{{ student.section or '—' }}</strong>
+                        </div>
+                        <div class="mint-profile-item">
+                            <span>Parent Name</span>
+                            <strong>{{ student.parent_name }}</strong>
+                        </div>
+                        <div class="mint-profile-item">
+                            <span>Parent Phone</span>
+                            <strong>{{ student.parent_phone }}</strong>
+                        </div>
+                        <div class="mint-profile-item">
+                            <span>Parent Email</span>
+                            <strong>{{ student.parent_email or '—' }}</strong>
+                        </div>
+                    </div>
+
+                    <div class="mint-profile-actions">
+                        <a class="mint-action mint-action-edit" href="{{ url_for('student_edit', register_number=student.register_number) }}">Edit Details</a>
+                        <a class="mint-back-link" href="{{ url_for('student_records') }}">← Back to Records</a>
+                    </div>
+                </section>
+            </div>
+        </main>
+    </div>
+</body>
+</html>

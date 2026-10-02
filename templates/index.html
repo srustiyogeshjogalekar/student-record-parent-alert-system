@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+{% set active_page = 'home' %}
+{% block title %}Home | Alva's Degree College{% endblock %}
+{% block content %}
+<main class="hero">
+    <div class="hero-content">
+        <div class="eyebrow"><span></span> Welcome to your campus hub</div>
+        <h1>Student Record <em>and</em><br>Parent Alert System</h1>
+        <div class="title-rule"></div>
+        <p>One clear space to manage student records, follow academic progress, and keep families connected.</p>
+    </div>
+    <div class="hero-art" aria-hidden="true">
+        <div class="halo"></div>
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+        <div class="art-label label-top">Connected learning</div>
+        <div class="art-label label-bottom">Alva's Degree College</div>
+        <div class="logo-frame">
+            <img src="{{ url_for('static', filename='images.jpg') }}" alt="Alva's Degree College logo">
+        </div>
+    </div>
+</main>
+
+<section class="feature-strip" id="courses" aria-label="Platform features">
+    <div><span>01</span><strong>Student records</strong></div>
+    <div><span>02</span><strong>Performance tracking</strong></div>
+    <div><span>03</span><strong>Parent alerts</strong></div>
+</section>
+
+<section class="about-section" id="about">
+    <span class="section-kicker">A better way forward</span>
+    <p>Designed for the people who help every student move ahead.</p>
+</section>
+{% endblock %}

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Manage Timetable | Alva's Degree College</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/mint.css') }}">
+</head>
+<body class="mint-page">
+    <main class="mint-content">
+        <div class="mint-heading">
+            <div><h1>Manage Timetable</h1><p>Create, update, or remove faculty class assignments.</p></div>
+            <a class="mint-browse-btn" href="{{ url_for('admin_dashboard') }}">← Back to Admin Dashboard</a>
+        </div>
+        {% if message %}<p class="timetable-admin-message">{{ message }}</p>{% endif %}
+
+        <section class="mint-card">
+            <h2>Choose class</h2>
+            <p class="mint-subtitle">Select the class whose schedule you want to manage.</p>
+            <form method="get" class="timetable-admin-grid timetable-admin-filters">
+                <label>Course<input name="course" value="{{ course }}" required></label>
+                <label>Year<input name="year" value="{{ year }}" required></label>
+                <label>Semester<input name="semester" value="{{ semester }}" required></label>
+                <label>Section<input name="section" value="{{ section }}" required></label>
+                <button class="mint-browse-btn" type="submit">Load Timetable</button>
+            </form>
+        </section>
+
+        <section class="mint-card timetable-admin-spaced">
+            <h2>Add or update class period</h2>
+            <p class="mint-subtitle">Saving the same day, period, and class updates that timetable slot.</p>
+            <form method="post" class="timetable-admin-grid">
+                <input type="hidden" name="action" value="save_entry">
+                <input type="hidden" name="course" value="{{ course }}">
+                <input type="hidden" name="year" value="{{ year }}">
+                <input type="hidden" name="semester" value="{{ semester }}">
+                <input type="hidden" name="section" value="{{ section }}">
+                <label>Day<select name="day" required>{% for day in ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'] %}<option value="{{ day }}">{{ day }}</option>{% endfor %}</select></label>
+                <label>Start time – end time<select name="period_id" required>{% for period in periods %}<option value="{{ period.id }}">{{ period.start_time }} – {{ period.end_time }} ({{ period.label }})</option>{% endfor %}</select></label>
+                <label>Subject<select name="subject_id"><option value="">Activity / no subject</option>{% for subject in subjects %}<option value="{{ subject.id }}">{{ subject.subject_name }}</option>{% endfor %}</select></label>
+                <label>Faculty<select name="faculty_id" required><option value="" selected disabled>Select faculty</option>{% for item in faculty %}<option value="{{ item.faculty_id }}">{{ item.name }} ({{ item.faculty_id }})</option>{% endfor %}</select></label>
+                <label>Classroom<input name="room" placeholder="e.g. Room 101"></label>
+                <label>Lab batch <input name="lab_batch" placeholder="Optional"></label>
+                <label>Activity type<input name="activity_type" placeholder="Optional"></label>
+                <button class="mint-browse-btn" type="submit">Save Timetable Entry</button>
+            </form>
+        </section>
+
+        <section class="mint-card timetable-admin-spaced">
+            <h2>Current timetable</h2>
+            <div class="timetable-admin-table-wrap"><table class="result-table"><thead><tr><th>Day</th><th>Time</th><th>Subject</th><th>Faculty</th><th>Course / Class</th><th>Year</th><th>Classroom</th><th></th></tr></thead><tbody>
+            {% for entry in entries %}<tr><td>{{ entry.day }}</td><td>{{ entry.start_time }}–{{ entry.end_time }}</td><td>{{ entry.subject_name or entry.activity_type or '—' }}</td><td>{{ entry.faculty_name or '—' }}</td><td>{{ entry.course }}{% if entry.section %} – {{ entry.section }}{% endif %}</td><td>{{ entry.year }}</td><td>{{ entry.room or '—' }}</td><td><form method="post"><input type="hidden" name="action" value="delete_entry"><input type="hidden" name="entry_id" value="{{ entry.id }}"><input type="hidden" name="course" value="{{ course }}"><input type="hidden" name="year" value="{{ year }}"><input type="hidden" name="semester" value="{{ semester }}"><input type="hidden" name="section" value="{{ section }}"><button class="timetable-delete-btn" type="submit">Delete</button></form></td></tr>{% else %}<tr><td colspan="8">No timetable entries have been created for this class.</td></tr>{% endfor %}
+            </tbody></table></div>
+        </section>
+
+        <section class="mint-card timetable-admin-spaced">
+            <h2>Add custom period</h2>
+            <form method="post" class="timetable-admin-grid timetable-admin-filters"><input type="hidden" name="action" value="add_period"><input type="hidden" name="course" value="{{ course }}"><label>Period label<input name="label" placeholder="e.g. 7th Period" required></label><label>Start time<input name="start_time" type="time" required></label><label>End time<input name="end_time" type="time" required></label><label class="timetable-check"><input name="saturday" type="checkbox"> Saturday-only</label><button class="mint-browse-btn" type="submit">Add Period</button></form>
+        </section>
+    </main>
+</body>
+</html>

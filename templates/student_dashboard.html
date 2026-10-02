@@ -1,0 +1,191 @@
+{% extends "base.html" %}
+{% block title %}Student Dashboard | Alva's Degree College{% endblock %}
+{% block content %}
+<main class="dashboard-body">
+    <div class="dashboard-shell">
+        <aside class="dashboard-sidebar">
+            <div class="dashboard-brand">
+                <img src="{{ url_for('static', filename='images.jpg') }}" alt="Alva's Degree College logo">
+            </div>
+            <nav class="dashboard-nav" aria-label="Student navigation">
+                <a class="dashboard-nav-link active" href="{{ url_for('student_dashboard') }}"><span class="nav-symbol">⌂</span>Dashboard</a>
+                <a class="dashboard-nav-link" href="#profile"><span class="nav-symbol">👤</span>My Profile</a>
+                <a class="dashboard-nav-link" href="#attendance"><span class="nav-symbol">📅</span>My Attendance</a>
+                <a class="dashboard-nav-link" href="#marks"><span class="nav-symbol">▤</span>My Marks</a>
+                <a class="dashboard-logout" href="{{ url_for('parent_logout') if parent_view else url_for('student_logout') }}"><span class="nav-symbol">↻</span>Logout</a>
+            </nav>
+        </aside>
+
+        <section class="dashboard-main">
+            <header class="dashboard-header">
+                <div class="dashboard-header-left">
+                    <span class="eyebrow">Dashboard</span>
+                    <h1>{% if parent_view %}{{ student.name }}'s Parent Portal{% else %}Welcome back, {{ student.name }}!{% endif %}</h1>
+                    <p>{% if parent_view %}Secure, read-only access to your child's academic information, attendance, alerts, and results.{% else %}Here’s an overview of your academic information.{% endif %}</p>
+                </div>
+                <div class="dashboard-header-right">
+                    <div class="notification-pill" aria-label="Notifications">3</div>
+                    <div class="profile-chip">
+                        <div class="profile-avatar">{{ student.name[0] if student.name else 'S' }}</div>
+                        <div>
+                            <strong>{{ student.name }}</strong>
+                            <small>USN: {{ student.register_number }}</small>
+                        </div>
+                    </div>
+                </div>
+            </header>
+
+            <div class="dashboard-content">
+                <div class="metrics-row">
+                    <article class="metric-card card-forest">
+                        <div class="metric-card-header">
+                            <p>Attendance</p>
+                            <strong>{{ attendance_rate }}%</strong>
+                        </div>
+                        <p class="metric-card-text">Attendance rate for all classes.</p>
+                        <div class="metric-card-meta">{{ attendance_summary.Present }} present • {{ attendance_summary.Absent }} absent</div>
+                        <a class="metric-card-action" href="#attendance">View Details</a>
+                    </article>
+                    <article class="metric-card card-purple">
+                        <div class="metric-card-header">
+                            <p>Internal Marks</p>
+                            <strong>{{ average_score }}%</strong>
+                        </div>
+                        <p class="metric-card-text">Average score across all tests.</p>
+                        <div class="metric-card-meta">{{ total_tests }} test{{ 's' if total_tests != 1 else '' }}</div>
+                        <a class="metric-card-action" href="#marks">View Details</a>
+                    </article>
+                    <article class="metric-card card-soft">
+                        <div class="metric-card-header">
+                            <p>Course</p>
+                            <strong>{{ student.course }}</strong>
+                        </div>
+                        <p class="metric-card-text">{{ student.year }} year student.</p>
+                        <div class="metric-card-meta">Phone: {{ student.student_phone }}</div>
+                        <a class="metric-card-action" href="{{ url_for('student_logout') }}">Logout</a>
+                    </article>
+                </div>
+
+                <div class="overview-grid">
+                    <article class="overview-card">
+                        <div class="overview-card-head">
+                            <strong>Test 1 - Details</strong>
+                            <a href="#marks">View All</a>
+                        </div>
+                        <div class="overview-card-stat">
+                            <span class="big-number">{{ average_score }}%</span>
+                            <div>
+                                <p>Total Subjects</p>
+                                <strong>{{ marks_by_subject|length }}</strong>
+                            </div>
+                        </div>
+                        <div class="small-stat-row">
+                            <div class="stat-box">
+                                <span>Average Marks</span>
+                                <strong>{{ average_score }}%</strong>
+                            </div>
+                            <div class="stat-box">
+                                <span>Highest Marks</span>
+                                <strong>{{ marks_by_subject[0].average_percent if marks_by_subject else 0 }}%</strong>
+                            </div>
+                        </div>
+                        <div class="subject-performance">
+                            {% for subject_data in marks_by_subject %}
+                            <div class="subject-performance-row">
+                                <span>{{ subject_data.subject }}</span>
+                                <div class="subject-performance-bar">
+                                    <div class="subject-performance-fill" style="width: {{ subject_data.average_percent }}%;"></div>
+                                </div>
+                                <strong>{{ subject_data.average_percent }}%</strong>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </article>
+
+                    <article class="overview-card">
+                        <div class="overview-card-head">
+                            <strong>Test 2 - Details</strong>
+                            <a href="#marks">View All</a>
+                        </div>
+                        <div class="overview-card-stat">
+                            <span class="big-number">{{ average_score }}%</span>
+                            <div>
+                                <p>Total Subjects</p>
+                                <strong>{{ marks_by_subject|length }}</strong>
+                            </div>
+                        </div>
+                        <div class="small-stat-row">
+                            <div class="stat-box">
+                                <span>Average Marks</span>
+                                <strong>{{ average_score }}%</strong>
+                            </div>
+                            <div class="stat-box">
+                                <span>Lowest Marks</span>
+                                <strong>{{ marks_by_subject[-1].average_percent if marks_by_subject else 0 }}%</strong>
+                            </div>
+                        </div>
+                        <div class="subject-performance">
+                            {% for subject_data in marks_by_subject %}
+                            <div class="subject-performance-row">
+                                <span>{{ subject_data.subject }}</span>
+                                <div class="subject-performance-bar">
+                                    <div class="subject-performance-fill" style="width: {{ subject_data.average_percent }}%;"></div>
+                                </div>
+                                <strong>{{ subject_data.average_percent }}%</strong>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </article>
+
+                    <article class="overview-card semester-card">
+                        <div class="overview-card-head">
+                            <strong>Semester Result - Details</strong>
+                            <a href="#marks">View All</a>
+                        </div>
+                        <div class="semester-summary-grid">
+                            <div>
+                                <span>SGPA</span>
+                                <strong>{{ ((average_score / 100) * 9 + 1) | round(2) }}</strong>
+                            </div>
+                            <div>
+                                <span>CGPA</span>
+                                <strong>{{ ((average_score / 100) * 9 + 1) | round(2) }}</strong>
+                            </div>
+                            <div>
+                                <span>Result</span>
+                                <strong>PASS</strong>
+                            </div>
+                            <div>
+                                <span>Total Credits</span>
+                                <strong>20</strong>
+                            </div>
+                        </div>
+                        <div class="semester-line-chart">
+                            <canvas id="sgpaChart" aria-label="SGPA trend" role="img" style="width:100%;height:160px"></canvas>
+                        </div>
+                        <div class="semester-table">
+                            <div class="semester-table-row header">
+                                <span>Semester</span>
+                                <span>SGPA</span>
+                                <span>Result</span>
+                                <span>Credits</span>
+                            </div>
+                            {% for sem in [1,2,3,4,5,6] %}
+                            <div class="semester-table-row">
+                                <span>Sem {{ sem }}</span>
+                                <span>{{ ((average_score / 100) * 9 + 1 - (6 - sem) * 0.2) | round(2) }}</span>
+                                <span>PASS</span>
+                                <span>20</span>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </article>
+                </div>
+                <script>
+                    window.SGPA_DATA = {{ semester_sgpa | default([]) | tojson }};
+                </script>
+            </div>
+        </section>
+    </div>
+</main>
+{% endblock %}

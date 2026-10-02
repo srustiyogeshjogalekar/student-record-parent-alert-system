@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Take Attendance | Alva's Degree College</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body class="dashboard-body">
+    <div class="dashboard-shell">
+        <aside class="dashboard-sidebar">
+            <a class="dashboard-brand" href="{{ url_for('faculty_dashboard') }}"><img src="{{ url_for('static', filename='images.jpg') }}" alt="Alva's Degree College logo"></a>
+            <nav class="dashboard-nav" aria-label="Faculty navigation">
+                <a class="dashboard-nav-link" href="{{ url_for('faculty_dashboard') }}"><span class="nav-symbol">⌂</span>Dashboard</a>
+                <a class="dashboard-nav-link" href="{{ url_for('new_student') }}"><span class="nav-symbol">♙</span>Add Student</a>
+                <a class="dashboard-nav-link active" href="{{ url_for('attendance') }}"><span class="nav-symbol">▣</span>Attendance</a>
+                <a class="dashboard-nav-link" href="{{ url_for('students', course=course) }}"><span class="nav-symbol">▣</span>Student Records</a>
+                <a class="dashboard-nav-link" href="{{ url_for('internal_marks', course=course, year=year) }}"><span class="nav-symbol">▤</span>Internal Marks</a>
+                <a class="dashboard-nav-link" href="#results"><span class="nav-symbol">▥</span>Semester Results</a>
+                <a class="dashboard-nav-link" href="#alerts"><span class="nav-symbol">◈</span>Parent Alert</a>
+                <a class="dashboard-nav-link" href="{{ url_for('event_coordinator') }}"><span class="nav-symbol">▣</span>Event Coordinator</a>
+                <a class="dashboard-nav-link" href="#reports"><span class="nav-symbol">▧</span>Attendance Reports</a>
+            </nav>
+            <a class="dashboard-logout" href="{{ url_for('home') }}"><span class="nav-symbol">↪</span>Logout</a>
+        </aside>
+        <main class="dashboard-main">
+            <header class="dashboard-topbar"><button class="sidebar-toggle" type="button" aria-label="Toggle navigation">☰</button><div class="faculty-profile"><span class="profile-avatar">F</span><span><strong>Faculty</strong><small>Computer Science</small></span><span class="profile-chevron">⌄</span></div></header>
+            <div class="attendance-content">
+                <div class="attendance-breadcrumb"><a href="{{ url_for('faculty_dashboard') }}">Home</a><span>›</span><a href="{{ url_for('attendance') }}">Attendance</a><span>›</span><strong>Take Attendance</strong></div>
+                <header class="attendance-heading"><div><span class="attendance-heading-icon">▣</span><div><h1>Take Attendance</h1><p>Select class details and mark attendance for students.</p></div></div></header>
+                {% if error %}<p class="attendance-message error" role="alert">{{ error }}</p>{% elif saved %}<p class="attendance-message success" role="status">Attendance saved successfully.</p>{% endif %}
+                <form class="attendance-card" method="get" data-attendance-form>
+                    <div class="attendance-filters">
+                        <label>Course <b>*</b><select name="course" required>{% for option in ['BCA', 'BBA', 'BA', 'B.Com', 'B.Sc'] %}<option value="{{ option }}" {% if course == option %}selected{% endif %}>{{ option }}</option>{% endfor %}</select></label>
+                        <label>Year <b>*</b><select name="year" required>{% for option in ['1st Year', '2nd Year', '3rd Year'] %}<option value="{{ option }}" {% if year == option %}selected{% endif %}>{{ option }}</option>{% endfor %}</select></label>
+                        <label>Semester <b>*</b><select name="semester" required>{% for option in ['I Semester', 'II Semester', 'III Semester', 'IV Semester', 'V Semester', 'VI Semester'] %}<option value="{{ option }}" {% if semester == option %}selected{% endif %}>{{ option }}</option>{% endfor %}</select></label>
+                        <label>Subject <b>*</b><select name="subject" required>{% for option in ['FOC', 'Programming in C', 'Mathematics', 'Kannada', 'Hindi', 'English'] %}<option value="{{ option }}" {% if subject == option %}selected{% endif %}>{{ option }}</option>{% endfor %}</select></label>
+                        <label>Section <input name="section" value="{{ section }}" placeholder="e.g. A"></label><label>Language Group <select name="language_group"><option value="">All</option><option {% if language_group == 'Kannada' %}selected{% endif %}>Kannada</option><option {% if language_group == 'Hindi' %}selected{% endif %}>Hindi</option></select></label>
+                        <label>Date <b>*</b><input type="date" name="attendance_date" value="{{ attendance_date }}" required></label>
+                        <button class="primary-attendance-action" type="submit" style="justify-self:start;padding:8px 14px;font-size:.76rem">Load Students</button>
+                    </div>
+                    <div class="attendance-summary"><div><span class="summary-icon present">✓</span><span>Present<strong>{{ counts.Present }}<small>{{ ((counts.Present / students|length) * 100)|round(1) if students else 0 }}%</small></strong></span></div><div><span class="summary-icon absent">×</span><span>Absent<strong>{{ counts.Absent }}<small>{{ ((counts.Absent / students|length) * 100)|round(1) if students else 0 }}%</small></strong></span></div><div><span class="summary-icon event">♧</span><span>Event<strong>{{ counts.Event }}<small>{{ ((counts.Event / students|length) * 100)|round(1) if students else 0 }}%</small></strong></span></div></div>
+                    <div class="attendance-table-wrap"><table class="attendance-table"><thead><tr><th>#</th><th>Register Number</th><th>Student Name</th><th>Status</th></tr></thead><tbody>{% for student in students %}{% set student_status = statuses.get(student.register_number, 'Present') %}<tr><td>{{ loop.index }}</td><td>{{ student.register_number }}</td><td>{{ student.name }}</td><td><div class="status-options">{% for option in ['Present', 'Absent', 'Event'] %}<label class="status-option {{ option|lower }} {% if student_status == option %}selected{% endif %}"><input type="radio" name="status_{{ student.register_number }}" value="{{ option }}" {% if student_status == option %}checked{% endif %}><span>{{ option }}</span></label>{% endfor %}</div></td></tr>{% else %}<tr><td colspan="4" class="empty-attendance">No students found for {{ course }}, {{ year }}.</td></tr>{% endfor %}</tbody></table></div>
+                    <div class="attendance-actions"><a class="secondary-action" href="{{ url_for('faculty_dashboard') }}">← Cancel</a><button class="primary-attendance-action" type="submit" formmethod="post" formaction="{{ url_for('attendance') }}">✓ Save Attendance</button><a class="secondary-action" href="{{ url_for('view_attendance', course=course, year=year, semester=semester, subject=subject) }}">▤ View Attendance</a><a class="primary-attendance-action" href="{{ url_for('modify_attendance', course=course, year=year, semester=semester, subject=subject, attendance_date=attendance_date) }}">✎ Modify Attendance</a></div>
+                </form>
+                <p class="attendance-autosave" aria-live="polite">Changes are saved automatically.</p>
+            </div>
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
+
+
+
